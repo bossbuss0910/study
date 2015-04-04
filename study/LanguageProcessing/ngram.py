@@ -14,15 +14,18 @@ def wakati(text):
 		node = node.next
 	return wakati_list
 
-w_list=[]
 def ngram(word_list,N):
+	list=[]
+	print len(word_list)
 	for i in range(0,len(word_list)):
 		if i+N-1>=len(word_list):
 			break
 		n_gram=[]
-		for k in range(i,i+N):
+		for k in range(i+i+N):
 			n_gram.append(word_list[k])
-		w_list.append(set(n_gram))
+		list.append(set(n_gram))
+	for set_word in list:
+		print ",".join(set_word)
 
 def text_split(text):
 	f=open(text)
@@ -40,7 +43,8 @@ def text_split(text):
 			str=str+line
 		line=f.readline()
 	review_list.append(str)
-	f.close()
+	for str in review_list:
+		print str
 	return review_list
 
 
@@ -50,13 +54,12 @@ def main(N,text):
 	ngram(list,N)
 
 if __name__ == "__main__":
+	home = os.path.expanduser('~')
+	dic = os.path.join(home,'Documents','study','LanguageProcessing','dic')
 
-	filename='dic/review1.txt'
+	filename='review1.txt'
 
-	text = os.path.abspath(filename)
+	text = os.path.join(dic,filename)
 	text_list=text_split(text)
-	for text in text_list:
-		main(3,text)
-	for set_word in w_list:
-		if "価格" in set_word:
-			print ",".join(set_word)
+	main(3,text)
+	
