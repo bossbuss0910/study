@@ -5,7 +5,7 @@ import os
 
 #分かち書き　名詞と形容詞のみを抽出
 def wakati(text):
-	#マイニングする品詞
+#マイニングする品詞
 	mining=["名詞","形容詞"]
 	wakati_list=[]
 	tagger = mecab.Tagger("-Ochasen")
@@ -71,37 +71,39 @@ def main(N,text,review_id):
 	ngram(list,N,review_id)
 
 if __name__ == "__main__":
-
-	input_filename='dic/review2.txt'
-	output_filename='output/wordlist2.csv'
+	for i in range(1,50):
+		print i
+		input_filename='dic/review%d.txt'%i
+		output_filename='output/wordlist%d.csv'%i
 	#レビュー数
-	review_number=0
+		review_number=0
 	#値段or価格を含むレビュー数
-	target_review=0
+		target_review=0
 
-	text = os.path.abspath(input_filename)
-	text_list=text_split(text)
-	for index,text in enumerate(text_list):
-		main(3,text,index)
-	
-	review_number=index
+		text = os.path.abspath(input_filename)
+		text_list=text_split(text)
+		for index,text in enumerate(text_list):
+			main(3,text,index)
+			review_number=index
 	#ファイルに書き込むためのリスト
-	output_list=[]
+		output_list=[]
 
-	for K,V in user_map.items():
-		word_list=[]
-		for word_set in V:
-			if "価格" in word_set or "値段" in word_set:
-				target_review += 1
-				for word in word_set:
-					word_list.append(word)
-		if len(word_list)!=0:
-			output_list.append("{0},{1},{2}".format(K+1,star_list[K-1],",".join(set(word_list))))
-	for s in output_list:
-		print s
+		for K,V in user_map.items():
+			word_list=[]
+			for word_set in V:
+				if "価格" in word_set or "値段" in word_set:
+					target_review = target_review+1
+					for word in word_set:
+						word_list.append(word)
+			if len(word_list)!=0:
+				output_list.append("{0},{1},{2}".format(K+1,star_list[K-1],",".join(set(word_list))))
 
-	output_filename=os.path.abspath(output_filename)
+		output_filename=os.path.abspath(output_filename)
 
-	output_file(output_filename,output_list)
-	print "レビュー数:%d" %review_number
-	print "値段・価格を含むレビュー数:%d" %target_review
+		output_file(output_filename,output_list)
+		print "レビュー番号:%d"%i
+		print "レビュー数:%d" %review_number
+		print "値段・価格を含むレビュー数:%d" %target_review
+		user_map={}
+		star_list=[]
+
