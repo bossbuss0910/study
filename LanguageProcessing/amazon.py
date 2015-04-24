@@ -1,49 +1,64 @@
 #coding: utf-8
 
 import os
+import json
+import gzip
 
-meta_file="dic/amazon_review/metadata.json"
-review_file="dic/amazon_review/reviews_Amazon_Instant_Video.json"
-def file_input(file):
-	f=open(file)
-	data=f.read()
-	lines=data.split("\n")
-	return lines
+current_dic="~/amazon_review"
+meta_file=current_dic+"/metadata.json.gz"
+review_file=current_dic+"/reviews_Amazon_Instant_Video.json.gz"
 
-def mining_meta(metas):
+def parse(path):
+	g=gzip.open(path,"r")
+	for l in g:
+		yield eval(l)
+
+def mining_meta(path):
 	dic={}
-	for data in metas:
-		if "price" in data:
-			print "ID:%s	price:%s" % (data["asin"],data["price"]
-			dic[data["asin"]]=float(data["price"])
-	print dic
+	count=0
+	tar=0
+	for meta in parse(path):
+		count=count+1
+		if 'price' in meta:
+			tar=tar+1
+			dic[meta['asin']]=meta['price']
+	print 'item:%d	tar:%d'%(count,tar)
 	return dic
 
-def mining_review(datas):
+def mining_review(path):
 	dic={}
-	for data in datas:
-		if data["asin"] in dic.keys:
-			dic[data["asin"]]=[]
-			dic[data["asin"]].append(data["reviewText"])
-		else:
-			dic[data["asin"]]=data["reciewText"]
-	print dic
+	for data in parse(path):
+		dic[data['asin']]=[]
+		dic[data['asin']].append(data['reviewText'])
 	return dic
 
+def output_json(dic):
+	with open(current_dic+"/price_review.json",'w') as f :
+		json.dump(dic, f,sort_keys=True,indent=4)
+
+def matching(meta,review):
+	match_dic={}
+	for r_K,r_V in review.items():
+		if r_K in meta:
+			match_dic[r_K]={}
+			match_dic[r_K][meta[r_K]]=r_V
+	return match_dic	
+			
 def main():
-	meta_path = os.path.abspath(meta_file)
-	review_path = os.path.abspath(review_file)
-	
-	meta_list=[]
-	meta_list=file_input(meta_path)
-	
-	review_list=[]
-	review_list=file_input(review_path)
-	
+	meta_path = os.path.expanduser(meta_file)
+	review_path = os.path.expanduser(review_file)
+	ratings=[]
+	print meta_path
+
 	meta_dic={}
 	review_dic={}
-	meta_dic=mining_meta(meta_list)
-	review_dic=mining_review(review_dic)
+	meta_dic=mining_meta(meta_path)
+	review_dic=mining_review(review_path)
+
+	match_dic={}
+	match_dic=matching(meta_dic,review_dic)
+	
+	output_json(match_dic)
 
 if __name__ == "__main__":
 	main()
