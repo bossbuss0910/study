@@ -7,7 +7,7 @@ import json
 
 current_dir="~/amazon_review"
 input_filename=current_dir+"/price_review.json"
-output_filename=current_dir+"/price_sence.txt"
+output_filename=current_dir+"/price_sence_rate.txt"
 expensive_list=["expensive"]
 cheap_list=["cheap"]
 
@@ -18,11 +18,10 @@ def sentence_split(target):
 
 def price_sence(price_review_dic):
 	price_sence_dic={}
-	review_num=0
 	for price,review in price_review_dic.items():
 		e_count=0
 		c_count=0
-		price_sence_list=[]
+		review_num=0
 		for sentence in review:
 			review_num+=1
 			check_count=0
@@ -36,10 +35,8 @@ def price_sence(price_review_dic):
 				print sentence
 				c_count-=1
 				e_count-=1
-			price_sence_list=[e_count,c_count]
-		price_sence_dic[price]=price_sence_list
+		price_sence_dic[price]=[e_count,c_count,review_num]
 	print price_sence_dic
-	print "review_num:%d"%review_num
 	return price_sence_dic
 
 def price_match(dic):
@@ -60,12 +57,24 @@ def input_file(path):
 def output_file(dic,path):
 	f=open(path,"w")
 	for price in sorted(dic.keys()):
-		out_str=str(price)+" "
-		for number in dic[price]:
-			out_str += str(number)+" "
-		f.write(out_str.strip()+"\n")
+		if dic[price][0]+dic[price][1]!=0:
+			print len(dic[price])
+			out_str=str(price)+" "
+			for number in dic[price]:
+				out_str += str(number)+" "
+			f.write(out_str.strip()+"\n")
 	f.close()
-	
+
+def output_rate_file(dic,path):
+	f=open(path,"w")
+	for price in sorted(dic.keys()):
+		if dic[price][0]+dic[price][1]!=0:
+			out_str=str(price)+" "
+			for number in range(2):
+				out_str += str(float(dic[price][number])/dic[price][2])+" "
+			f.write(out_str.strip()+"\n")
+			print out_str.strip()+"\n"
+	f.close()	
 
 def main():
 	file_path=os.path.expanduser(input_filename)
@@ -89,7 +98,7 @@ def main():
 	price_list.sort()
 	print "low:%f	high:%f	ave:%f"%(price_list[0],price_list[len(price_list)-1],sum(price_list)/len(price_list))
 	print "expensive:%d	cheap:%d"%(ex_num,ch_num)
-	output_file(price_sence_dic2,outfile_path)
+	output_rate_file(price_sence_dic2,outfile_path)
 
 if __name__=="__main__":
 	main()
