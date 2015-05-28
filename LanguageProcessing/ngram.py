@@ -54,12 +54,10 @@ def main(N,text):
 	ngram(list,N)
 
 if __name__ == "__main__":
-	home = os.path.expanduser('~')
-	dic = os.path.join(home,'Documents','study','LanguageProcessing','dic')
 
-	filename='review1.txt'
+	filename='dic/review1.txt'
 
-	text = os.path.join(dic,filename)
+	text = os.path.abspath(filename)
 	text_list=text_split(text)
 	main(3,text)
 	
