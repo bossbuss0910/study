@@ -2,6 +2,8 @@
 import MeCab as mecab
 import os
 
+
+#分かち書き　名詞と形容詞のみを抽出
 def wakati(text):
 	#マイニングする品詞
 	mining=["名詞","形容詞"]
@@ -14,8 +16,12 @@ def wakati(text):
 		node = node.next
 	return wakati_list
 
-w_list=[]
-def ngram(word_list,N):
+#各reviewのマップ
+user_map={}
+
+#N_gram抽出
+def ngram(word_list,N,review_id):
+	w_list=[]
 	for i in range(0,len(word_list)):
 		if i+N-1>=len(word_list):
 			break
@@ -23,7 +29,10 @@ def ngram(word_list,N):
 		for k in range(i,i+N):
 			n_gram.append(word_list[k])
 		w_list.append(set(n_gram))
+	user_map[review_id]=w_list
 
+
+#テキストデータの分割
 def text_split(text):
 	f=open(text)
 	for k in range(0,1):
@@ -44,10 +53,10 @@ def text_split(text):
 	return review_list
 
 
-def main(N,text):
+def main(N,text,review_id):
 	list = []
 	list = wakati(text)
-	ngram(list,N)
+	ngram(list,N,review_id)
 
 if __name__ == "__main__":
 
@@ -55,8 +64,12 @@ if __name__ == "__main__":
 
 	text = os.path.abspath(filename)
 	text_list=text_split(text)
-	for text in text_list:
-		main(3,text)
-	for set_word in w_list:
-		if "価格" in set_word:
-			print ",".join(set_word)
+	for index,text in enumerate(text_list):
+		main(3,text,index)
+	for K,V in user_map.items():
+		word_set=[]
+		print K
+		for word_set in V:
+			if "価格" in word_set:
+				for word in word_set:
+					word_list.append(word)
