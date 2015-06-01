@@ -62,27 +62,15 @@ if __name__ == "__main__":
 
 	filename='dic/review1.txt'
 
-	#レビュー数
-	review_number=0
-	#値段or価格を含むレビュー数
-	target_review=0
-
 	text = os.path.abspath(filename)
 	text_list=text_split(text)
 	for index,text in enumerate(text_list):
 		main(3,text,index)
-
-	review_number=index
-
 	for K,V in user_map.items():
 		word_list=[]
+		print K+1
 		for word_set in V:
-			if "価格" in word_set or "値段" in word_set:
-				target_review += 1
+			if "価格" in word_set||"値段" in word_set:
 				for word in word_set:
 					word_list.append(word)
-		print K+1
 		print ",".join(set(word_list))
-	print 
-	print "レビュー数:%d" %review_number
-	print "値段・価格を含むレビュー数:%d" %target_review
