@@ -60,7 +60,7 @@ def main(N,text,review_id):
 
 if __name__ == "__main__":
 
-	filename='dic/review1.txt'
+	filename='dic/review2.txt'
 
 	#レビュー数
 	review_number=0
