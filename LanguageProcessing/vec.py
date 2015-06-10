@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from sklearn.svm import LinearSVC
 word_data=[]
 
 def file_input(path):
