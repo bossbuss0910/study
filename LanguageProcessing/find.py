@@ -8,9 +8,9 @@ import json
 current_dir="~/amazon_review"
 #current_dir2="~/bosswork"
 input_filename=current_dir+"/price_review.json"
-output_filename="/price_sence_rate.txt"
-expensive_list=["expensive","high"]
-cheap_list=["cheap","low"]
+output_filename="/sence_rate/price_sence_rate.txt"
+expensive_list=["rental","cheap","expensive","price","cost","price!"]
+cheap_list=["sedada"]
 
 def sentence_split(target):
 	word_list=[]
@@ -27,9 +27,13 @@ def price_sence(price_review_dic):
 			review_num+=1
 			check_count=0
 			if len(list(set(expensive_list)&set(sentence_split(sentence))))>0:
+				print list(set(expensive_list)&set(sentence_split(sentence)))
+				print sentence
 				e_count=e_count+1
 				check_count=check_count+1
 			if len(list(set(cheap_list)&set(sentence_split(sentence))))>0:
+				print list(set(cheap_list)&set(sentence_split(sentence)))
+				print sentence
 				c_count=c_count+1
 				check_count=check_count+1
 			if check_count==2:
@@ -67,12 +71,15 @@ def output_file(dic,path):
 
 def output_rate_file(dic,path):
 	f=open(path,"w")
+	sum_p=0
 	for price in sorted(dic.keys()):
+		sum_p+=dic[price][2]
 		if dic[price][0]+dic[price][1]!=0:
 			out_str=str(price)+" "
 			for number in range(2):
 				out_str += str(float(dic[price][number])/dic[price][2])+" "
 			f.write(out_str.strip()+"\n")
+	print sum_p
 	f.close()	
 
 def main():
@@ -94,7 +101,7 @@ def main():
 	price_list.sort()
 	print "low:%f	high:%f	ave:%f"%(price_list[0],price_list[len(price_list)-1],sum(price_list)/len(price_list))
 	print "expensive:%d	cheap:%d"%(ex_num,ch_num)
-	output_rate_file(price_sence_dic2,dirname+output_filename)
+#	output_rate_file(price_sence_dic2,dirname+output_filename)
 
 if __name__=="__main__":
 	main()

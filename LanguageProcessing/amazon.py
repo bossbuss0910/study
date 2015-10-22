@@ -6,7 +6,8 @@ import gzip
 
 current_dic="~/amazon_review"
 meta_file=current_dic+"/metadata.json.gz"
-review_file=current_dic+"/reviews_Amazon_Instant_Video.json.gz"
+review_file=current_dic+"/reviews_Apps_for_Android.json.gz"
+output_file="/price_review_music.json"
 
 def parse(path):
 	g=gzip.open(path,"r")
@@ -33,7 +34,7 @@ def mining_review(path):
 	return dic
 
 def output_json(dic):
-	with open(current_dic+"/price_review.json",'w') as f :
+	with open(os.path.expanduser(current_dic+"/price_review_apps.json"),'w') as f :
 		json.dump(dic, f,sort_keys=True,indent=4)
 
 def matching(meta,review):

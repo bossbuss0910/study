@@ -10,7 +10,7 @@ parameter0=[0.,0.]
 parameter1=[0,0]
 
 current_dic="/dic"
-input_filename="price_sence_rate.txt"
+input_filename="price_sence_rate_test.txt"
 split_num=30
 
 
