@@ -4,7 +4,7 @@ ex_word="expensive"
 ch_word="cheap"
 
 data=word2vec.Text8Corpus(input_file)
-model = word2vec.Word2Vec(data,size=100,window=5,min_count=10)
+model = word2vec.Word2Vec(data,size=200,window=5,min_count=20)
 
 out_ex=model.most_similar(ex_word)
 out_ch=model.most_similar(ch_word)

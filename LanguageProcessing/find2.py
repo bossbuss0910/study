@@ -7,8 +7,8 @@ import json
 
 input_filename="video_price.json"
 output_filename="price_sence_rate_test.txt"
-expensive_list=["expensive","than","still","just","entertaing"]
-cheap_list=["price!","cheap","star","right","super"]
+expensive_list=["expensive","entertaining","daughter","well"]
+cheap_list=["cheap","quality","video","half"]
 
 def sentence_split(target):
 	word_list=[]
