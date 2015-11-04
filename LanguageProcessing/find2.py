@@ -17,6 +17,7 @@ def sentence_split(target):
 
 def price_sence(price_review_dic):
 	price_sence_dic={}
+	classfi_count = 0
 	for price,review in price_review_dic.items():
 		e_count=0
 		c_count=0
@@ -35,9 +36,14 @@ def price_sence(price_review_dic):
 				c_count=c_count+1
 				check_count=check_count+1
 			if check_count==2:
-				print sentence
-				c_count-=1
-				e_count-=1
+				if len(list(set(expensive_list)&set(sentence_split(sentence))))>len(list(set(cheap_list)&set(sentence_split(sentence)))):
+#					print sentence
+					c_count-=1
+				elif len(list(set(expensive_list)&set(sentence_split(sentence))))<len(list(set(cheap_list)&set(sentence_split(sentence)))):
+					e_count-=1
+				else:
+					c_count-=1
+					e_count-=1
 		price_sence_dic[price]=[e_count,c_count,review_num]
 	return price_sence_dic
 '''
